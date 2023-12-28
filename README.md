@@ -1,7 +1,7 @@
 # attendance_app
 
 A new Flutter project.
-
+A flutter app for employee attendance and leaves logs aiming only for android.
 ## Getting Started
 
 This project is a starting point for a Flutter application.

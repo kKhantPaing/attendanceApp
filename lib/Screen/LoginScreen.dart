@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:attendance_app/widget/PasswordTextField.dart';
 import 'package:attendance_app/helper/DbHelper.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

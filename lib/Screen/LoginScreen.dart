@@ -11,9 +11,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   var email = '', password = '';
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  var _LoginStatus = '';
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  var _loginStatus = '';
 
   DbHelper dbHelper = DbHelper();
   @override
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
-                              _LoginStatus,
+                              _loginStatus,
                               style: const TextStyle(
                                 color: Colors.red,
                               ),
@@ -82,15 +82,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 password: _passwordController.text);
                             switch (int.parse(result)) {
                               case -1:
-                                _LoginStatus = 'Errors in login';
+                                _loginStatus = 'Errors in login';
                                 break;
                               case 0:
-                                _LoginStatus = 'Wrong Email or Password';
+                                _loginStatus = 'Wrong Email or Password';
                                 break;
                               case > 0:
-                                _LoginStatus = '';
+                                _loginStatus = '';
                                 break;
-                            };
+                            }
+                            ;
                           },
                           color: const Color(0xff0095ff),
                           elevation: 0,

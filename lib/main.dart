@@ -1,3 +1,5 @@
+import 'package:attendance_app/Screen/LoginScreen.dart';
+import 'package:attendance_app/Screen/AttendanceScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,6 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/login' : (context) => LoginScreen(),
+        '/attendance' : (context) => AttendanceScreen(),
+       },
+      initialRoute: '/login',
+    );
   }
 }

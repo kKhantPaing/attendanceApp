@@ -14,9 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/login' : (context) => LoginScreen(),
-        '/attendance' : (context) => AttendanceScreen(),
-       },
+        '/login': (context) => const LoginScreen(),
+        '/attendance': (context) => const AttendanceScreen(),
+      },
       initialRoute: '/attendance',
     );
   }

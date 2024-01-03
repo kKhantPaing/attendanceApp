@@ -13,7 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var email = '', password = '';
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  var _LoginStatus = '';
+  var _loginStatus = '';
 
   DbHelper dbHelper = DbHelper();
   @override
@@ -45,9 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: <Widget>[
                           inputField(
-                              label: "Email",
-                              controller: _emailController,
-                              secureText: false),
+                              label: "Email", controller: _emailController),
                           inputField(
                               label: "Password",
                               controller: _passwordController,
@@ -92,8 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               case > 0:
                                 _LoginStatus = '';
                                 break;
-                            }
-                            ;
+                            };
                           },
                           color: const Color(0xff0095ff),
                           elevation: 0,

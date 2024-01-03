@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
-                              _LoginStatus,
+                              _loginStatus,
                               style: const TextStyle(
                                 color: Colors.red,
                               ),
@@ -82,13 +82,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 password: _passwordController.text);
                             switch (int.parse(result)) {
                               case -1:
-                                _LoginStatus = 'Errors in login';
+                                _loginStatus = 'Errors in login';
                                 break;
                               case 0:
-                                _LoginStatus = 'Wrong Email or Password';
+                                _loginStatus = 'Wrong Email or Password';
                                 break;
                               case > 0:
-                                _LoginStatus = '';
+                                _loginStatus = '';
                                 break;
                             };
                           },

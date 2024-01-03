@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         '/login' : (context) => LoginScreen(),
         '/attendance' : (context) => AttendanceScreen(),
        },
-      initialRoute: '/login',
+      initialRoute: '/attendance',
     );
   }
 }

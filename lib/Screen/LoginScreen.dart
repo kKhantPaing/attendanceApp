@@ -11,8 +11,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   var email = '', password = '';
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   var _LoginStatus = '';
 
   DbHelper dbHelper = DbHelper();
@@ -45,7 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: <Widget>[
                           inputField(
-                              label: "Email", controller: _emailController),
+                              label: "Email",
+                              controller: _emailController,
+                              secureText: false),
                           inputField(
                               label: "Password",
                               controller: _passwordController,
@@ -90,7 +92,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               case > 0:
                                 _LoginStatus = '';
                                 break;
-                            };
+                            }
+                            ;
                           },
                           color: const Color(0xff0095ff),
                           elevation: 0,

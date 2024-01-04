@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 
-Widget CheckInOutWidget(String time, String cio) {
+Widget checkInOutWidget(String time, String cio) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Text(
         cio,
         style: const TextStyle(
-          fontSize: 15,
+          fontSize: 14,
           fontWeight: FontWeight.w400,
-          color: Colors.black,
+          color: Colors.grey,
         ),
       ),
       const SizedBox(
         height: 5,
+      ),
+      Text(
+        time,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
+        ),
       ),
     ],
   );

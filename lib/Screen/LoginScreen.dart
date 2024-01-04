@@ -1,6 +1,8 @@
 import 'package:attendance_app/widget/PasswordTextField.dart';
 import 'package:attendance_app/helper/DbHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:attendance_app/helper/GlobalInfo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   var _loginStatus = '';
+  GlobalInfo globalInfo = GlobalInfo();
 
   DbHelper dbHelper = DbHelper();
   @override
@@ -80,6 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             var result = await dbHelper.userLogin(
                                 email: _emailController.text,
                                 password: _passwordController.text);
+
+                            bool flag = false;
                             switch (int.parse(result)) {
                               case -1:
                                 _loginStatus = 'Errors in login';
@@ -89,8 +94,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 break;
                               case > 0:
                                 _loginStatus = '';
+                                flag = (int.parse(result) > 0);
                                 break;
                             };
+                            if (flag) {
+                                final loginDataPref = await SharedPreferences.getInstance();
+                                await loginDataPref.setInt('empId', int.parse(result));
+                                globalInfo.empId = int.parse(result);
+                                globalInfo.branchId = 1;
+                                Navigator.pushNamed(context, '/attendance');
+                              }
                           },
                           color: const Color(0xff0095ff),
                           elevation: 0,

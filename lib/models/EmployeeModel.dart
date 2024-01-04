@@ -9,16 +9,17 @@ class EmployeeModel {
   String? phone;
   String? branchid;
 
-  EmployeeModel(
-      {this.departmentid,
-      this.departmentname,
-      this.teamid,
-      this.teamname,
-      this.code,
-      this.name,
-      this.positionname,
-      this.phone,
-      this.branchid});
+  EmployeeModel({
+    this.departmentid,
+    this.departmentname,
+    this.teamid,
+    this.teamname,
+    this.code,
+    this.name,
+    this.positionname,
+    this.phone,
+    this.branchid,
+  });
 
   EmployeeModel.fromJson(Map<String, dynamic> json) {
     departmentid = json['departmentid'];

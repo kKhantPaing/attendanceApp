@@ -21,6 +21,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   late String _timeString;
   late String _swipeBtnText = 'Swipe to Check In';
   bool _isFinished = false;
+  int _status = 0;
   int _normalCount = 0;
   int _lateCount = 0;
   int _leaveCount = 0;
@@ -34,7 +35,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     // TODO: implement initState
     super.initState();
     _timeString = _formatDateTime(DateTime.now());
-    // Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
+    Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
     _loadData();
 
   }
@@ -157,7 +158,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           color: Colors.grey,
                         ),
                         buttonText: _swipeBtnText,
-                        onFinish: () {},
+                        onFinish: () {
+                          dbHelper.checkInOut(time: _timeString, empId: int.parse(globalInfo.empId.toString()), status: _status);
+                          _isFinished = true;
+                        },
                         isFinished: _isFinished,
                         onWaitingProcess: () {},
                       )
@@ -181,7 +185,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    return DateFormat('hh:mm:ss').format(dateTime);
+    return DateFormat('hh:mm tt').format(dateTime);
   }
 
   void _loadData() {

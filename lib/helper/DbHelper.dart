@@ -24,9 +24,20 @@ class DbHelper {
 
     if (result.statusCode == 200) {
       return EmployeeDashboard.fromJson(
-          jsonDecode(jsonDecode(result.body)[0]) as Map<String, dynamic>);
+          jsonDecode(jsonDecode(result.body)[0]));
     } else {
       return throw Exception('Failed to load');
     }
   }
+
+  Future<String> checkInOut({String time = '', int empId = 0, int status = 0}) async {
+    Uri url = Uri.http(api, '/api/mobile/EmployeeLogin', {'time': time, 'empId':empId, 'status':status});
+    Response result = await post(url);
+    if (result.statusCode == 200) {
+      return "1";
+    } else {
+      return "-1";
+    }
+  }
+}
 }

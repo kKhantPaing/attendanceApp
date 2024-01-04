@@ -1,9 +1,8 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 import 'package:attendance_app/helper/GlobalInfo.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 import 'package:attendance_app/widget/SummaryContainer.dart';
 import 'package:attendance_app/helper/DbHelper.dart';
@@ -17,8 +16,7 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  String _empName = 'KK', _empPos = 'Programmer';
-  late String _timeString;
+  String _empName = '', _empPos = '';
   late String _swipeBtnText = 'Swipe to Check In';
   bool _isFinished = false;
   int _status = 0;
@@ -26,18 +24,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   int _lateCount = 0;
   int _leaveCount = 0;
   int _absentCount = 0;
+  String _cinTime = '--:--';
+  String _coutTime = '--:--';
+
   DbHelper dbHelper = new DbHelper();
   GlobalInfo globalInfo = GlobalInfo();
-  late Future<EmployeeDashboard> employeeDashboard;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _timeString = _formatDateTime(DateTime.now());
-    Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
     _loadData();
-
   }
 
   @override
@@ -45,8 +42,24 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           centerTitle: true,
-          title: const Text('Attendance'),
+          title: const Text('Attendance',
+          style: TextStyle(
+            color: Colors.white,
+          ),),
+          backgroundColor: Colors.blueAccent,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.more_vert,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                // do something
+              },
+            )
+          ],
         ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -141,14 +154,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                       ),
                       Card(
                         color: Colors.white60,
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              checkInOutWidget('10:00AM', 0),
-                              checkInOutWidget('--:--', 1),
-                            ],
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            checkInOutWidget(_cinTime, 0),
+                            checkInOutWidget(_coutTime, 1),
+                          ],
                         ),
                       ),
                       SwipeableButtonView(
@@ -159,7 +170,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                         ),
                         buttonText: _swipeBtnText,
                         onFinish: () {
-                          dbHelper.checkInOut(time: _timeString, empId: int.parse(globalInfo.empId.toString()), status: _status);
+                          dbHelper.checkInOut(
+                              time: DateTime.now.toString(),
+                              empId: globalInfo.empId.toString(),
+                              status: _status.toString());
                           _isFinished = true;
                         },
                         isFinished: _isFinished,
@@ -176,38 +190,41 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  void _getTime() {
-    final DateTime timeNow = DateTime.now();
-    final String formattedDateTime = _formatDateTime(timeNow);
+  void alreadyLogIn() async {
+    final loginDataPref = await SharedPreferences.getInstance();
+    int empID = loginDataPref.getInt('empId') ?? 0;
+    if (empID > 0) {
+      globalInfo.empId = empID.toString();
+      globalInfo.branchId = 1.toString();
+    }
+  }
+
+  void _loadData() async {
+    alreadyLogIn();
+    var value = await dbHelper.getEmployeeData(
+        employeeid: globalInfo.empId.toString(),
+        branchid: globalInfo.branchId.toString(),
+        fdate: DateTime.now().toString());
     setState(() {
-      _timeString = formattedDateTime;
+      var data = EmployeeDashboard.fromJson(jsonDecode(value));
+      _empName = data.empname;
+      _empPos = data.emppos;
+      _normalCount = data.normal as int;
+      _lateCount = data.late as int;
+      _lateCount = data.leave as int;
+      _absentCount = data.absent as int;
+      _cinTime = data.intime;
+      _coutTime = data.outtime;
+      if (_status == 1) {
+        _swipeBtnText = 'Swipe to Check Out';
+      }
     });
   }
-
-  String _formatDateTime(DateTime dateTime) {
-    return DateFormat('hh:mm tt').format(dateTime);
-  }
-
-  void _loadData() {
-    employeeDashboard = dbHelper.getEmployeeData(
-        employeeid: 8, branchid: "1", fdate: DateTime.now().toString());
-
-    // setState(() {
-    //   var tmp = employeeDashboard;
-    //   _empName = tmp["empname"];
-    //   _empPos = tmp["emppos"];
-    //   _normalCount = tmp["normal"];
-    //   _lateCount = tmp["late"];
-    //   _leaveCount = tmp["leave"];
-    //   _absentCount = tmp["absent"];
-    //   _swipeBtnText = 'Swipe to Check In';
-    // });
-    }
 }
 
 Widget checkInOutWidget(String time, int cio) {
   return Padding(
-    padding: EdgeInsets.symmetric(vertical: 10),
+    padding: const EdgeInsets.symmetric(vertical: 10),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[

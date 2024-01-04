@@ -1,7 +1,7 @@
 class EmployeeModel {
-  int? departmentid;
+  String? departmentid;
   String? departmentname;
-  int? teamid;
+  String? teamid;
   String? teamname;
   String? code;
   String? name;

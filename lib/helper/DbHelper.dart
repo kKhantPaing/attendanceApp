@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:http/http.dart';
-import 'package:attendance_app/models/EmployeeDashboard.dart';
 
 class DbHelper {
   final String api = '192.168.100.13:808';
@@ -16,22 +13,20 @@ class DbHelper {
     }
   }
 
-  Future<EmployeeDashboard> getEmployeeData(
-      {int? employeeid = 0, String? fdate = '', String? branchid = ''}) async {
+  Future<String> getEmployeeData(
+      {required String employeeid,
+      required String fdate,
+      required String branchid}) async {
     Uri url = Uri.http(api, '/api/mobile/EmployeeLogin',
         {'employeeid': employeeid, 'fdate': fdate, 'branchid': branchid});
-    Response result = await get(url);
-
-    if (result.statusCode == 200) {
-      return EmployeeDashboard.fromJson(
-          jsonDecode(jsonDecode(result.body)[0]));
-    } else {
-      return throw Exception('Failed to load');
-    }
+    final result = await get(url);
+    return result.body;
   }
 
-  Future<String> checkInOut({String time = '', int empId = 0, int status = 0}) async {
-    Uri url = Uri.http(api, '/api/mobile/EmployeeLogin', {'time': time, 'empId':empId, 'status':status});
+  Future<String> checkInOut(
+      {String time = '', String empId = '0', String status = '0'}) async {
+    Uri url = Uri.http(api, '/api/mobile/EmployeeLogin',
+        {'time': time, 'empId': empId, 'status': status});
     Response result = await post(url);
     if (result.statusCode == 200) {
       return "1";
@@ -39,5 +34,4 @@ class DbHelper {
       return "-1";
     }
   }
-}
 }

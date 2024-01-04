@@ -1,8 +1,8 @@
 class CheckInOutEnqModel {
-  int? employeeid;
+  String? employeeid;
   String? date;
-  int? departmentid;
-  int? teamid;
+  String? departmentid;
+  String? teamid;
   String? employeecode;
   String? employeename;
   String? departmentname;
@@ -13,7 +13,7 @@ class CheckInOutEnqModel {
   String? status;
   String? positionname;
   String? photo;
-  int? attstatusid;
+  String? attstatusid;
 
   CheckInOutEnqModel(
       {this.employeeid,

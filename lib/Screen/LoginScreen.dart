@@ -1,3 +1,4 @@
+import 'package:attendance_app/Screen/AttendanceScreen.dart';
 import 'package:attendance_app/widget/PasswordTextField.dart';
 import 'package:attendance_app/helper/DbHelper.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,26 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   var _loginStatus = '';
   GlobalInfo globalInfo = GlobalInfo();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    alreadyLogIn();
+  }
+
+  void alreadyLogIn() async {
+    final loginDataPref = await SharedPreferences.getInstance();
+    int empID = loginDataPref.getInt('empId') ?? 0;
+    if (empID > 0) {
+      globalInfo.empId = empID.toString();
+      globalInfo.branchId = "1";
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AttendanceScreen()),
+      );
+    }
+  }
 
   DbHelper dbHelper = DbHelper();
   @override
@@ -96,14 +117,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _loginStatus = '';
                                 flag = (int.parse(result) > 0);
                                 break;
-                            };
+                            }
+                            ;
                             if (flag) {
-                                final loginDataPref = await SharedPreferences.getInstance();
-                                await loginDataPref.setInt('empId', int.parse(result));
-                                globalInfo.empId = int.parse(result);
-                                globalInfo.branchId = 1;
-                                Navigator.pushNamed(context, '/attendance');
-                              }
+                              final loginDataPref =
+                                  await SharedPreferences.getInstance();
+                              await loginDataPref.setInt(
+                                  'empId', int.parse(result));
+                              globalInfo.empId = result;
+                              globalInfo.branchId = "1";
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AttendanceScreen()),
+                              );
+                            }
                           },
                           color: const Color(0xff0095ff),
                           elevation: 0,
@@ -155,7 +184,7 @@ Widget inputField({required label, required controller, secureText = false}) {
               controller: controller,
               decoration: InputDecoration(
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: (Colors.grey[400])!,
@@ -167,7 +196,7 @@ Widget inputField({required label, required controller, secureText = false}) {
                     ),
                   )),
             ),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
     ],

@@ -1,7 +1,7 @@
 class GlobalInfo {
   String? url;
-  int? empId;
-  int? branchId;
+  String? empId;
+  String? branchId;
 
   GlobalInfo({this.url, this.empId, this.branchId});
 

@@ -1,53 +1,51 @@
 class EmployeeDashboard {
   EmployeeDashboard({
-    this.employeeid,
-    this.empname,
-    this.emppos,
-    this.normal,
-    this.late,
-    this.leave,
-    this.absent,
-    this.intime,
-    this.outtime,
-    this.status,
+    required this.employeeid,
+    required this.empname,
+    required this.emppos,
+    required this.normal,
+    required this.late,
+    required this.leave,
+    required this.absent,
+    required this.intime,
+    required this.outtime,
+    required this.status,
   });
 
-  int? employeeid;
-  String? empname;
-  String? emppos;
-  int? normal;
-  int? late;
-  int? leave;
-  int? absent;
-  String? intime;
-  String? outtime;
-  int? status;
+  String employeeid = '';
+  String empname = '';
+  String emppos = '';
+  String normal = '';
+  String late = '';
+  String leave = '';
+  String absent = '';
+  String intime = '';
+  String outtime = '';
+  String status = '';
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = new Map<String, dynamic>();
-    json["employeeid"] = employeeid;
-    json["empname"] = empname;
-    json["emppos"] = emppos;
-    json["normal"] = normal;
-    json["late"] = late;
-    json["leave"] = leave;
-    json["absent"] = absent;
-    json["intime"] = intime;
-    json["outtime"] = outtime;
-    json["status"] = status;
-    return json;
+  factory EmployeeDashboard.fromJson(Map<String, dynamic> json) {
+    return EmployeeDashboard(
+      employeeid: json["employeeid"].toString(),
+      empname: json["empname"].toString(),
+      emppos: json["emppos"].toString(),
+      normal: json["normal"].toString(),
+      late: json["late"].toString(),
+      leave: json["leave"].toString(),
+      absent: json["absent"].toString(),
+      intime: json["intime"].toString(),
+      outtime: json["outtime"].toString(),
+      status: json["status"].toString(),
+    );
   }
 
-  EmployeeDashboard.fromJson(Map<String, dynamic> json) {
-    employeeid = json["employeeid"];
-    empname = json["empname"];
-    emppos = json["emppos"];
-    normal = json["normal"] ?? 0;
-    late = json["late"] ?? 0;
-    leave = json["leave"] ?? 0;
-    absent = json["absent"] ?? 0;
-    intime = json["intime"] ?? '';
-    outtime = json["outtime"] ?? '';
-    status = json["status"] ?? 0;
-  }
+  get getEmpId => employeeid;
+  get getEmpName => empname;
+  get getEmppos => emppos;
+  get getNormal => normal;
+  get getLate => late;
+  get getLeave => leave;
+  get getAbsent => absent;
+  get getIntime => intime;
+  get getOuttime => outtime;
+  get getStatus => status;
 }

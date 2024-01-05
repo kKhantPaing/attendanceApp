@@ -18,7 +18,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       obscureText: obscureText,
       controller: widget.controller,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         suffixIcon: GestureDetector(
           onTap: () {
             setState(() {

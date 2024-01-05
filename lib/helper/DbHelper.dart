@@ -2,7 +2,7 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
 class DbHelper {
-  final String api = '192.168.100.13:808';
+  final String api = '192.168.48.110:1111';
 
   Future<String> userLogin({String email = '', String password = ''}) async {
     Uri url = Uri.http(api, '/api/mobile/EmployeeLogin', {'email': email});
@@ -15,12 +15,13 @@ class DbHelper {
   }
 
   Future<String> getEmployeeData(
-      {required String employeeid,
-      required String fdate,
-      required String branchid}) async {
-    Uri url = Uri.http(api, '/api/mobile/EmployeeLogin',
+      {String employeeid = '',
+      String fdate = '',
+      String branchid = ''}) async {
+    Uri url = Uri.http(api, '/api/mobile/GetEmployeeData',
         {'employeeid': employeeid, 'fdate': fdate, 'branchid': branchid});
     final result = await get(url);
+    print(result.body);
     return result.body;
   }
 

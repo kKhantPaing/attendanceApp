@@ -118,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 flag = (int.parse(result) > 0);
                                 break;
                             }
-                            ;
                             if (flag) {
                               final loginDataPref =
                                   await SharedPreferences.getInstance();

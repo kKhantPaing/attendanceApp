@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:attendance_app/Screen/ProfileScreen.dart';
-import 'package:attendance_app/helper/GlobalInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
@@ -18,6 +17,7 @@ class AttendanceScreen extends StatefulWidget {
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
   String _empName = '', _empPos = '';
+  late int _empId = 0;
   late String _swipeBtnText = 'Swipe to Check In';
   bool _isFinished = false;
   int _status = 0;
@@ -28,8 +28,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   String _cinTime = '--:--';
   String _coutTime = '--:--';
 
-  DbHelper dbHelper = new DbHelper();
-  GlobalInfo globalInfo = GlobalInfo();
+  DbHelper dbHelper = DbHelper();
 
   @override
   void initState() {
@@ -61,9 +60,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                      const PersonScreen()),
+                  MaterialPageRoute(builder: (context) => const PersonScreen()),
                 );
               },
             )
@@ -107,7 +104,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 20,
-                                    color: Colors.white70,
+                                    color: Colors.amberAccent,
                                   ),
                                 ),
                                 Text(
@@ -115,7 +112,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 18,
-                                    color: Colors.amberAccent,
+                                    color: Colors.white70,
                                   ),
                                 ),
                                 const SizedBox(height: 10),
@@ -181,13 +178,16 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           setState(() {
                             _isFinished = false;
                           });
-                          dbHelper.checkInOut(
-                              employeeid: globalInfo.empId.toString(),
-                              status: _status.toString());
+                          if (_status < 3) {
+                            dbHelper.checkInOut(
+                                employeeid: _empId.toString(),
+                                status: _status.toString());
+                            _loadData();
+                          }
                         },
                         isFinished: _isFinished,
                         onWaitingProcess: () {
-                          Future.delayed(Duration(seconds: 2), () {
+                          Future.delayed(const Duration(seconds: 2), () {
                             setState(() {
                               _isFinished = true;
                             });
@@ -205,31 +205,28 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  void alreadyLogIn() async {
-    final loginDataPref = await SharedPreferences.getInstance();
-    int empID = loginDataPref.getInt('empId') ?? 0;
-    if (empID > 0) {
-      globalInfo.empId = empID.toString();
-      globalInfo.branchId = 1.toString();
-    }
-  }
-
   void _loadData() async {
-    alreadyLogIn();
+    final loginDataPref = await SharedPreferences.getInstance();
+    _empId = loginDataPref.getInt('empId') ?? 0;
     var value = await dbHelper.getEmployeeData(
-        employeeid: globalInfo.empId.toString(),
-        branchid: globalInfo.branchId.toString(),
+        employeeid: _empId.toString(),
+        branchid: "1",
         fdate: DateTime.now().toString());
     setState(() {
-      var data = EmployeeDashboard.fromJson(jsonDecode(value));
+      var data = EmployeeDashboard.fromJson(jsonDecode(value)[0]);
       _empName = data.empname;
       _empPos = data.emppos;
-      _normalCount = data.normal as int;
-      _lateCount = data.late as int;
-      _lateCount = data.leave as int;
-      _absentCount = data.absent as int;
-      _cinTime = data.intime;
-      _coutTime = data.outtime;
+      _normalCount = int.parse(data.normal);
+      _lateCount = int.parse(data.late);
+      _lateCount = int.parse(data.leave);
+      _absentCount = int.parse(data.absent);
+      _cinTime = data.intime == '' ? '--:--' : data.intime;
+      _coutTime = data.outtime == '' ? '--:--' : data.outtime;
+      _status = data.intime == ''
+          ? 0
+          : data.outtime == ''
+              ? 1
+              : 2;
       if (_status == 1) {
         _swipeBtnText = 'Swipe to Check Out';
       }

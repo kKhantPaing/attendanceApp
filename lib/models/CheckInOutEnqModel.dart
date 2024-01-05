@@ -51,22 +51,22 @@ class CheckInOutEnqModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['employeeid'] = this.employeeid;
-    data['date'] = this.date;
-    data['departmentid'] = this.departmentid;
-    data['teamid'] = this.teamid;
-    data['employeecode'] = this.employeecode;
-    data['employeename'] = this.employeename;
-    data['departmentname'] = this.departmentname;
-    data['teamname'] = this.teamname;
-    data['time1'] = this.time1;
-    data['time2'] = this.time2;
-    data['workhours'] = this.workhours;
-    data['status'] = this.status;
-    data['positionname'] = this.positionname;
-    data['photo'] = this.photo;
-    data['attstatusid'] = this.attstatusid;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['employeeid'] = employeeid;
+    data['date'] = date;
+    data['departmentid'] = departmentid;
+    data['teamid'] = teamid;
+    data['employeecode'] = employeecode;
+    data['employeename'] = employeename;
+    data['departmentname'] = departmentname;
+    data['teamname'] = teamname;
+    data['time1'] = time1;
+    data['time2'] = time2;
+    data['workhours'] = workhours;
+    data['status'] = status;
+    data['positionname'] = positionname;
+    data['photo'] = photo;
+    data['attstatusid'] = attstatusid;
     return data;
   }
 }

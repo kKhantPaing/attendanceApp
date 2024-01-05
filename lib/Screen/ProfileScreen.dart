@@ -17,6 +17,9 @@ class _PersonScreenState extends State<PersonScreen> {
             title: const Text('Profile'),
             centerTitle: true,
           ),
+          body: Container(
+
+          ),
         ),
       ),
     );

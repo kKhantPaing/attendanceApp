@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:attendance_app/Screen/ProfileScreen.dart';
 import 'package:attendance_app/helper/GlobalInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,19 +45,26 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
-          title: const Text('Attendance',
-          style: TextStyle(
-            color: Colors.white,
-          ),),
+          title: const Text(
+            'Attendance',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
           backgroundColor: Colors.blueAccent,
           actions: <Widget>[
             IconButton(
               icon: const Icon(
-                Icons.more_vert,
+                Icons.person,
                 color: Colors.white,
               ),
               onPressed: () {
-                // do something
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                      const PersonScreen()),
+                );
               },
             )
           ],
@@ -170,14 +178,21 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                         ),
                         buttonText: _swipeBtnText,
                         onFinish: () {
+                          setState(() {
+                            _isFinished = false;
+                          });
                           dbHelper.checkInOut(
-                              time: DateTime.now.toString(),
-                              empId: globalInfo.empId.toString(),
+                              employeeid: globalInfo.empId.toString(),
                               status: _status.toString());
-                          _isFinished = true;
                         },
                         isFinished: _isFinished,
-                        onWaitingProcess: () {},
+                        onWaitingProcess: () {
+                          Future.delayed(Duration(seconds: 2), () {
+                            setState(() {
+                              _isFinished = true;
+                            });
+                          });
+                        },
                       )
                     ],
                   ),

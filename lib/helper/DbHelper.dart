@@ -1,4 +1,5 @@
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 class DbHelper {
   final String api = '192.168.100.13:808';
@@ -23,15 +24,9 @@ class DbHelper {
     return result.body;
   }
 
-  Future<String> checkInOut(
-      {String time = '', String empId = '0', String status = '0'}) async {
-    Uri url = Uri.http(api, '/api/mobile/EmployeeLogin',
-        {'time': time, 'empId': empId, 'status': status});
-    Response result = await post(url);
-    if (result.statusCode == 200) {
-      return "1";
-    } else {
-      return "-1";
-    }
+  Future<void> checkInOut({String employeeid = '0', String status = '0'}) async {
+    Uri url = Uri.http(api, '/api/mobile/SetEmployeeRecord',
+        {'employeeid': employeeid, 'status': status, 'fdate': DateFormat('yyyy-MM-dd').format(DateTime.now())});
+    await post(url);
   }
 }

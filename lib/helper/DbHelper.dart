@@ -21,13 +21,13 @@ class DbHelper {
     Uri url = Uri.http(api, '/api/mobile/GetEmployeeData',
         {'employeeid': employeeid, 'fdate': fdate, 'branchid': branchid});
     final result = await get(url);
-    print(result.body);
     return result.body;
   }
 
   Future<void> checkInOut({String employeeid = '0', String status = '0'}) async {
     Uri url = Uri.http(api, '/api/mobile/SetEmployeeRecord',
         {'employeeid': employeeid, 'status': status, 'fdate': DateFormat('yyyy-MM-dd').format(DateTime.now())});
+    print(url);
     await post(url);
   }
 }
